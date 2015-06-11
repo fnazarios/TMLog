@@ -19,7 +19,7 @@
 
 - (id) initWithHost:(NSString *)host port:(int)port {
     if (self = [super init]) {
-        if (![self canSendLogs]) {
+        if ([self canSendLogs]) {
             self.host = host;
             self.port = port;
             
