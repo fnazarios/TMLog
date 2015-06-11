@@ -19,20 +19,20 @@
 
 - (id) initWithHost:(NSString *)host port:(int)port {
     if (self = [super init]) {
-        
-        self.host = host;
-        self.port = port;
-        
-        pipe = [NSPipe pipe];
-        stderrWriteFileHandle = [pipe fileHandleForWriting];
-        stderrReadFileHandle = [pipe fileHandleForReading];
-        
-        dup2([stderrWriteFileHandle fileDescriptor], STDOUT_FILENO);
-        dup2([stderrWriteFileHandle fileDescriptor], STDERR_FILENO);
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationReceived:) name:NSFileHandleReadCompletionNotification object:stderrReadFileHandle];
-        [stderrReadFileHandle readInBackgroundAndNotify];
-        
+        if (![self canSendLogs]) {
+            self.host = host;
+            self.port = port;
+            
+            pipe = [NSPipe pipe];
+            stderrWriteFileHandle = [pipe fileHandleForWriting];
+            stderrReadFileHandle = [pipe fileHandleForReading];
+            
+            dup2([stderrWriteFileHandle fileDescriptor], STDOUT_FILENO);
+            dup2([stderrWriteFileHandle fileDescriptor], STDERR_FILENO);
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationReceived:) name:NSFileHandleReadCompletionNotification object:stderrReadFileHandle];
+            [stderrReadFileHandle readInBackgroundAndNotify];
+        }
     }
     
     return self;
@@ -40,9 +40,7 @@
 
 - (void)notificationReceived:(NSNotification *)notification {
     [stderrReadFileHandle readInBackgroundAndNotify];
-    if ([self canSendLogs]) {
-        [self sendLog:[self getLogMessage:notification]];
-    }
+    [self sendLog:[self getLogMessage:notification]];
 }
 
 - (BOOL) canSendLogs {
