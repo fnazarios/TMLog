@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TMLog"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Send output from NSLog() and println() (print() on Swift 2.0) to remote server like papertrail."
   s.description  = <<-DESC
                    Send output from NSLog() and println() (print() on Swift 2.0) to remote server like papertrail.
