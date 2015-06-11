@@ -20,7 +20,7 @@ To send your log to papertrail, is very easy ;)
 //AppDelegate.swift
 
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    LogHelper.startWith("logs3.papertrailapp.com", port: 48584)
+    TMLog.startWith("logs3.papertrailapp.com", port: 48584)
     return true
 }
 ```
