@@ -52,7 +52,13 @@
 }
 
 - (NSString *) getLogMessage:(NSNotification *)notification {
-    return [[NSString alloc] initWithData: [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem] encoding: NSUTF8StringEncoding];
+    NSData *dataReceived = [[notification userInfo] objectForKey: NSFileHandleNotificationDataItem];
+    
+    if (dataReceived != nil) {
+        return [[NSString alloc] initWithData: dataReceived  encoding: NSUTF8StringEncoding];
+    }
+    
+    return @"";
 }
 
 - (void) sendLog:(NSString *)logMessage {
